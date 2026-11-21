@@ -1,46 +1,42 @@
-# The World in One Day — 20 November 2026
+# The World in One Day — Friday 20 November 2026
 
-[![make.fun · news-image-20261120](https://make.fun/badge/news-image-20261120.svg)](https://make.fun/bounty/news-image-20261120?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261120)
-[![rank](https://make.fun/badge/news-image-20261120/ChristaNavisa/news-image-20261120/rank.svg)](https://make.fun/bounty/news-image-20261120/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261120)
-[![reward](https://make.fun/badge/news-image-20261120/ChristaNavisa/news-image-20261120/reward.svg)](https://make.fun/bounty/news-image-20261120?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261120)
+[![make.fun](https://make.fun/badge/news-image-20261120.svg)](https://make.fun/bounty/news-image-20261120)
+[![rank](https://make.fun/badge/news-image-20261120/ChristaNavisa/news-image-20261120/rank.svg)](https://make.fun/bounty/news-image-20261120)
+[![reward](https://make.fun/badge/news-image-20261120/ChristaNavisa/news-image-20261120/reward.svg)](https://make.fun/bounty/news-image-20261120)
 
-A front page summing up Friday 20 November 2026 in a single image:
-**12 drawn pictures and 36 stories**, built for the
-[make.fun bounty](https://make.fun/bounty/news-image-20261120).
+A one-page broadsheet that sums up the world news of **Friday 20 November 2026** — all of the day's news on a single 1024×1024 page.
 
-## What the picture shows
+## What is on the page
 
-- **12 illustrated story tiles** — every big story of the day gets its
-  own drawing and headline: the Russian missile strike on Kyiv's Dnipro
-  bridges (8 dead), Cyclone Akvan's landfall near Gopalpur (300,000
-  evacuated), GTA VI's record day one (32.5m copies, $3.79bn), COP31 in
-  overtime with "fossil fuels" dropped from the draft, the airspace
-  breach into Poland (2 missiles, 1 drone, NATO jets up), the ICJ ruling
-  that Myanmar committed genocide against the Rohingya, the US–China–
-  Russia joint declaration at Shenzhen, the Houthi strike on Riyadh's
-  PIF Tower, markets sliding (Nikkei −5%, S&P down a sixth day),
-  Anthropic's shares sliding on day two after its record IPO, Kenya's
-  42-day Ebola-free countdown, and an oil tanker burning in Hormuz.
-- **24 numbered briefs** below the pictures — the EU–UK summit, the
-  100,000-a-year youth mobility scheme, the US Senate's 51–48 Iran
-  war-powers vote, the Kerch Bridge reopening, Cyclone Xavier, the
-  Saudi interceptions, Iraq, Sri Lanka's rate rise, the cost-of-living
-  strikes in 25+ countries, Haiti, the n0n data leak, and more.
-- **The date is the masthead**: "FRIDAY 20 NOVEMBER 2026", with every
-  story verified as having happened or first been reported that day.
+- **Masthead** — "THE WORLD IN ONE DAY", dated Friday 20 November 2026.
+- **Stat strip** — 8 numbers from the day: 48 stories, 5 regions, 4 hero pictures, 1 world map, 400+ drones at Kyiv, S&P 500 −3.7%, Nvidia −14%, Peru quake 6.7.
+- **Four hero pictures, drawn in code** — the Shenzhen summit (Trump, Xi and Putin at one table under three flags), Kyiv under fire at night, the AI stock rout as a plunging chart, and the ICJ verdict in The Hague.
+- **World map** — schematic continents with 12 marked cities, from New York to Tokyo, plus a region breakdown and an explicit **DATE CHECK** box.
+- **The day in full** — 48 real stories from five regions (Europe 13, Americas 13, Asia 9, Middle East 7, Africa 6), each with a headline and a one-line summary.
 
-## How it is made
-
-The image is drawn by code from a hand-built list of the day's stories,
-researched from 20 November 2026 reporting. The finished image ships as
-`entry.png`; `main.py` (Python 3.13, standard library only) copies it to
-the output directory, deterministically — two runs write identical bytes,
-verified by sha256.
+## How to run
 
 ```sh
-MAKEFUN_OUTPUT_DIR=out python3 main.py   # writes out/entry.png
+python3 main.py
 ```
 
-## License
+The program writes `entry.png` to `$MAKEFUN_OUTPUT_DIR` (default `/output`). It is fully procedural and deterministic: fixed seeds, no network, no clock, no external files. Running it twice produces a byte-identical PNG.
 
-MIT — see [LICENSE](LICENSE).
+Pillow is used when installed; if it is missing, a pure standard-library renderer (raw RGB buffer + zlib PNG writer + built-in bitmap font) draws the same broadsheet, so the entry still produces a valid image in a bare sandbox.
+
+## Verification
+
+```sh
+mkdir -p /tmp/r5a /tmp/r5b
+MAKEFUN_OUTPUT_DIR=/tmp/r5a python3 main.py
+MAKEFUN_OUTPUT_DIR=/tmp/r5b python3 main.py
+sha256sum /tmp/r5a/entry.png /tmp/r5b/entry.png   # identical
+python3 -c "from PIL import Image; im = Image.open('/tmp/r5a/entry.png'); print(im.size, im.format)"
+```
+
+Both runs exit 0, produce byte-identical PNGs, and the image is 1024×1024 and under 1 MiB. The masthead carries the date "FRIDAY 20 NOVEMBER 2026", and the story list holds 48 stories.
+
+## Entry
+
+- Competition: [Gambar Berita 20 Nov](https://make.fun/bounty/news-image-20261120)
+- Round: 5 — broadsheet, denser than round 3's winning format (48 stories, 4 hero pictures, richer map, more stat numbers).
